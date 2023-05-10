@@ -1,6 +1,8 @@
-package io.junnyland.realworld.global.security
+package io.junnyland.realworld.user.action.`in`.http.security
 
-import org.springframework.beans.factory.annotation.Qualifier
+import io.junnyland.realworld.user.action.`in`.http.handler.AceessDeniedHandler
+import io.junnyland.realworld.user.action.out.security.TokenParser
+import io.junnyland.realworld.user.action.out.security.TokenValidator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.ReactiveAuthenticationManager
@@ -15,8 +17,9 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 class SecurityConfig(
-    private val jwtTokenProvider: JwtTokenProvider,
-    private val aceessDeniedHandler: AceessDeniedHandler
+    private val parser: TokenParser,
+    private val validate: TokenValidator,
+    private val aceessDeniedHandler: AceessDeniedHandler,
 ) {
     @Bean
     fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain? {
@@ -26,18 +29,19 @@ class SecurityConfig(
             .anyExchange().authenticated()
             .and()
             .addFilterAt(
-                JwtAuthenticationFilter(jwtTokenProvider,reactiveAuthenticationManager()),
+                JwtAuthenticationFilter(parser,validate, reactiveAuthenticationManager(),authenticationConverter()),
                 SecurityWebFiltersOrder.AUTHENTICATION
             )
-            .exceptionHandling{
+            .exceptionHandling {
                 it.accessDeniedHandler(aceessDeniedHandler)
-
             }
             .build()
     }
 
     @Bean
-    fun reactiveAuthenticationManager(): ReactiveAuthenticationManager {
-        return JwtAuthenticationManager(jwtTokenProvider)
-    }
+    fun reactiveAuthenticationManager(): ReactiveAuthenticationManager =
+        JwtAuthenticationManager(parser, validate)
+    @Bean
+    fun authenticationConverter(): AuthenticationConverter =
+        AuthenticationConverter(parser, validate)
 }
