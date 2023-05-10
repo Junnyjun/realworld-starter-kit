@@ -25,7 +25,7 @@ class SecurityConfig(
     fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain? {
         return http.csrf().disable()
             .authorizeExchange()
-            .pathMatchers("/api/**", "/api/users/login").permitAll()
+            .pathMatchers("/api/users/login","/api/users").permitAll()
             .anyExchange().authenticated()
             .and()
             .addFilterAt(

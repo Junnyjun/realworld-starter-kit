@@ -22,9 +22,7 @@ class JwtAuthenticationFilter(
     private val converter: AuthenticationConverter,
 ) : AuthenticationWebFilter(JwtAuthenticationManager(parser, validate)) {
     private val Authentication.token: String get() = this.credentials.toString()
-    private val ServerWebExchange.token: String
-        get() = this.request.headers.getFirst(AUTHORIZATION)
-            ?: throw AuthenticationCredentialsNotFoundException("Token not found")
+    private val ServerWebExchange.token: String get() = this.request.headers.getFirst(AUTHORIZATION) ?: ""
 
     override fun onAuthenticationSuccess(
         authentication: Authentication, webFilterExchange: WebFilterExchange): Mono<Void> = webFilterExchange.chain

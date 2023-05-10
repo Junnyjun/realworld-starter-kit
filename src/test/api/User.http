@@ -1,1 +1,10 @@
-http://localhost
+POST http://localhost:5712/api/users
+Content-Type: application/json
+
+{
+  "user":{
+    "username": "Jacob",
+    "email": "jake@jake.jake",
+    "password": "jakejake"
+  }
+}

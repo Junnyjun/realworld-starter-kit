@@ -3,7 +3,6 @@ package io.junnyland.realworld.user.action.out.security
 import com.nimbusds.jose.crypto.MACVerifier
 import com.nimbusds.jwt.SignedJWT
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 import java.util.*
 
 fun interface TokenValidator {

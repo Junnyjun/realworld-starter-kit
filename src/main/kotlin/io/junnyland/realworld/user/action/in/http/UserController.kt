@@ -29,7 +29,7 @@ class UserSignInHttpController(
 
         ) = user
         .map { it.toUsecase }
-        .map { userSignUp.signUp(it) }
+        .let { userSignUp.signUp(it) }
 }
 
 data class LoginRequest(
