@@ -1,6 +1,5 @@
-package io.junnyland.realworld.global.security
+package io.junnyland.realworld.user.action.`in`.http.handler
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.junnyland.realworld.global.Logger
 import org.springframework.http.HttpStatus
