@@ -1,21 +1,28 @@
 package io.junnyland.realworld.user.action.out.security
 
-import com.nimbusds.jose.crypto.MACVerifier
-import com.nimbusds.jwt.SignedJWT
+import io.jsonwebtoken.JwtException
+import io.jsonwebtoken.Jwts
+import io.junnyland.realworld.user.config.JwtConfig
 import org.springframework.stereotype.Component
-import java.util.*
+
 
 fun interface TokenValidator {
     fun by(token: String): Boolean
 
     @Component
-    class JwtTokenValidator : TokenValidator {
-        override fun by(token: String): Boolean = SignedJWT.parse(token)
-            .let { signed ->
-                signed.verify(MACVerifier(SecurityProperties.SECRETS)) &&
-                signed.jwtClaimsSet.issuer == SecurityProperties.ISSUEER &&
-                signed.jwtClaimsSet.expirationTime.after(Date())
-            }
-
+    class JwtTokenValidator(
+        private val securityInfo: JwtConfig.SecurityInfo,
+    ) : TokenValidator {
+        override fun by(token: String): Boolean = try {
+            Jwts.parserBuilder()
+                .setSigningKey(securityInfo.secretKey)
+                .build()
+                .parseClaimsJws(token)
+            true
+        } catch (jwtException: JwtException) {
+            false
+        } catch (exception: IllegalArgumentException) {
+            false
+        }
     }
 }

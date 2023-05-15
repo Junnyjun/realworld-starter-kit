@@ -1,41 +1,31 @@
 package io.junnyland.realworld.user.action.out.security
 
-import com.nimbusds.jose.JWSAlgorithm
-import com.nimbusds.jose.JWSHeader
-import com.nimbusds.jose.crypto.MACSigner
-import com.nimbusds.jwt.JWTClaimsSet
-import com.nimbusds.jwt.SignedJWT
+import io.jsonwebtoken.Jwts
+import io.junnyland.realworld.user.config.JwtConfig.SecurityInfo
+import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.util.*
+import java.time.Instant.now
+import java.time.temporal.ChronoUnit.SECONDS
+import java.util.Date.from
 
 fun interface TokenProvider {
-    fun generate(request: TokenRequest): String
+    fun generate(authentication: Authentication): String
 
     @Component
-    class JwtTokenProvider : TokenProvider {
-        override fun generate(request: TokenRequest): String = SignedJWT(JWSHeader(JWSAlgorithm.HS256), request.toClaim)
-                .also { it.sign(MACSigner(SecurityProperties.SECRETS)) }
-                .serialize()
-    }
+    class JwtTokenProvider(
+        private val securityInfo: SecurityInfo,
+    ) : TokenProvider {
 
-    data class TokenRequest(
-        val username: String,
-        val roles: List<String>,
-    ){
-        val toClaim: JWTClaimsSet
-            get() =  JWTClaimsSet.Builder()
-            .subject(username)
-            .issuer(SecurityProperties.ISSUEER)
-            .issueTime(Date.from(Instant.now()))
-            .expirationTime(
-                Date.from(
-                    Instant.now().plus(SecurityProperties.EXPIRED, ChronoUnit.SECONDS)
-                )
-            )
-            .claim("roles", roles)
-            .build()
+        override fun generate(authentication: Authentication): String =Jwts.builder()
+                .setClaims(authentication.toClaims())
+                .setIssuer(securityInfo.issuer)
+                .setIssuedAt(from(now()))
+                .setExpiration(from(now().plus(securityInfo.expired, SECONDS)))
+                .signWith(securityInfo.secretKey)
+                .compact()
     }
 }
+private fun Authentication.toClaims() =  Jwts
+    .claims()
+    .setSubject(this.name)
+    .also { it -> it["roles"] = this.authorities.joinToString(",") }
