@@ -10,15 +10,17 @@ import java.time.LocalDateTime
 @Document(collection = "User")
 data class UserEntity(
     @Id private val id: ObjectId = ObjectId.get(),
-    @Indexed private val email: String,
-    private val token: String,
+    @Indexed(unique = true) private val email: String,
+    private val token: String = "NOT_SET",
     private val username: String,
     private val password: String,
     private val bio: String?,
     private val image: String?,
     private val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
-    val toDomain: User = User(
+    fun entityId():String = id.toHexString()
+
+    fun toDomain(): User = User(
         email = this.email,
         token = this.token,
         username = this.username,
