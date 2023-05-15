@@ -18,7 +18,7 @@ data class UserEntity(
     private val image: String?,
     private val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
-    fun entityId():String = id.toHexString()
+    fun entityId(): String = id.toHexString()
 
     fun toDomain(): User = User(
         email = this.email,
@@ -28,6 +28,8 @@ data class UserEntity(
         bio = this.bio,
         image = this.image,
     )
+
+    fun updateToken(token: String): UserEntity = this.copy(token = token)
 
     companion object {
         fun byDomain(user: User): UserEntity = UserEntity(
