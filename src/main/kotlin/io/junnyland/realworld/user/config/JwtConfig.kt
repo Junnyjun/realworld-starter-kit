@@ -12,14 +12,14 @@ class JwtConfig {
     @Bean(name = ["securityInfo"])
     @Profile("live")
     fun live() = SecurityInfo(
-        "realworldlive",
+        "realworldlivejunnyland1234",
         "junnyland",
         60 * 60
     )
 
     @Bean(name = ["securityInfo"])
     fun default() = SecurityInfo(
-        "realworld",
+        "realworlddevelopjunnyland1234",
         "junnyland",
         60 * 60
     )
