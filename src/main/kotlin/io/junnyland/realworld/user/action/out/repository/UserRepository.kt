@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 
-fun Boolean.isNotHave() = !this
+private fun Boolean.isNotHave() = !this
 
 interface UserRepository {
     fun save(user: User): Mono<User>

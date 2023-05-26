@@ -25,8 +25,8 @@ data class UserEntity(
         token = this.token,
         username = this.username,
         password = this.password,
-        bio = this.bio,
-        image = this.image,
+        bio = this.bio ?: "",
+        image = this.image ?: "",
     )
 
     fun updateToken(token: String): UserEntity = this.copy(token = token)
