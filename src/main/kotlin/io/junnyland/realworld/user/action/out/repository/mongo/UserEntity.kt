@@ -32,15 +32,13 @@ data class UserEntity(
     fun updateToken(token: String): UserEntity = this.copy(token = token)
 
     companion object {
-        fun byDomain(user: User): UserEntity = UserEntity(
+        fun byDomain(user: User, encoded: String): UserEntity = UserEntity(
             email = user.email,
             username = user.username,
-            password = user.password,
+            password = encoded,
             token = user.token,
             bio = user.bio,
             image = user.image,
         )
-
     }
-
 }

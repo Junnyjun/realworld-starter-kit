@@ -26,8 +26,7 @@ class JwtTokenAuthenticationFilter(
             ?: chain.filter(exchange)
 
     private fun resolveToken(request: ServerHttpRequest): String? =
-        request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION)
+        request.headers.getFirst(HttpHeaders.AUTHORIZATION)
             ?.takeIf { it.startsWith(HEADER_PREFIX) }
             ?.substring(7)
-            ?: null
 }

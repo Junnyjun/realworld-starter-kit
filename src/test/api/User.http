@@ -9,13 +9,13 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8877/api/users/signup
+POST http://localhost:8877/api/users
 Content-Type: application/json
 
 {
   "user":{
     "username": "jake",
-    "email": "jake@jake.jake",
+    "email": "jake22@jake.jake",
     "password": "jakejake"
   }
 }

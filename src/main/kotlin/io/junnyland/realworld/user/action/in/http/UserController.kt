@@ -1,13 +1,8 @@
 package io.junnyland.realworld.user.action.`in`.http
 
-import io.junnyland.realworld.user.action.`in`.http.model.LoginRequest
-import io.junnyland.realworld.user.action.`in`.http.model.RootRequest
-import io.junnyland.realworld.user.action.`in`.http.model.RootResponse
-import io.junnyland.realworld.user.action.`in`.http.model.UserResponse
-import io.junnyland.realworld.user.domain.User
+import io.junnyland.realworld.user.action.`in`.http.model.*
 import io.junnyland.realworld.user.flow.UserSignIn
-import io.junnyland.realworld.user.flow.UserSignIn.SignInRequest
-import org.springframework.context.ApplicationContext
+import io.junnyland.realworld.user.flow.UserSignUp
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
@@ -15,7 +10,8 @@ import reactor.core.publisher.Mono
 @RestController
 @RequestMapping("/api/users")
 class UserSignInHttpController(
-    private val userSignIn: UserSignIn,
+    private val signIn: UserSignIn,
+    private val signUp: UserSignUp,
 ) {
 
     @PostMapping("/login")
@@ -23,7 +19,16 @@ class UserSignInHttpController(
         @RequestBody user: Mono<RootRequest<LoginRequest>>,
     ): Mono<RootResponse> =  user
         .map { it.user.toUsecase }
-        .let { userSignIn.login(it) }
+        .let { signIn.login(it) }
+        .map { UserResponse.from(it)  }
+        .map { RootResponse(it) }
+
+    @PostMapping()
+    fun signup(
+        @RequestBody user: Mono<RootRequest<SignUpRequest>>,
+    ): Mono<RootResponse> =  user
+        .map { it.user.toUsecase }
+        .let { signUp.signUp(it) }
         .map { UserResponse.from(it)  }
         .map { RootResponse(it) }
 }

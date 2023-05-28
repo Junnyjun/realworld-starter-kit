@@ -4,6 +4,7 @@ import io.junnyland.realworld.user.action.out.repository.mongo.MongoUserReposito
 import io.junnyland.realworld.user.action.out.repository.mongo.UserEntity
 import io.junnyland.realworld.user.domain.User
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
@@ -18,10 +19,11 @@ interface UserRepository {
     @Repository
     class UserNosqlRepository(
         private val repository: MongoUserRepository,
+        private val passwordEncoder: PasswordEncoder,
     ) : UserRepository {
         override fun save(user: User) = repository.existsByEmail(user.email)
             .filter { it.isNotHave() }
-            .flatMap { repository.save(UserEntity.byDomain(user)) }
+            .flatMap { repository.save(UserEntity.byDomain(user,passwordEncoder.encode(user.password))) }
             .map { it.toDomain() }
             .doOnError { throw IllegalStateException("Create User Fail!") }
 

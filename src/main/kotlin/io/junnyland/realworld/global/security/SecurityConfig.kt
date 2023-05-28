@@ -63,7 +63,7 @@ class SecurityConfig(
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers(
                     HttpMethod.POST,
-                    "/api/users",
+                    "/api/users/**",
                     "/api/users/login"
                 ).permitAll()
                 .pathMatchers(

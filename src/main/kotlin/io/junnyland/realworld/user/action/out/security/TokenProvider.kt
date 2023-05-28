@@ -7,16 +7,16 @@ import org.springframework.stereotype.Component
 import java.time.Instant.now
 import java.time.temporal.ChronoUnit.SECONDS
 import java.util.Date.from
-
+typealias Token = String
 fun interface TokenProvider {
-    fun generate(authentication: Authentication): String
+    fun generate(authentication: Authentication): Token
 
     @Component
     class JwtTokenProvider(
         private val securityInfo: SecurityInfo,
     ) : TokenProvider {
 
-        override fun generate(authentication: Authentication): String =Jwts.builder()
+        override fun generate(authentication: Authentication): Token =Jwts.builder()
                 .setClaims(authentication.toClaims())
                 .setIssuer(securityInfo.issuer)
                 .setIssuedAt(from(now()))
