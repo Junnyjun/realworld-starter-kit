@@ -3,19 +3,40 @@ Content-Type: application/json
 
 {
   "user":{
-    "email": "jake@jake.jake",
-    "password": "1234"
+    "email": "jake28@jake.jake",
+    "password": "jakejake"
   }
 }
 
-###
+######
+
 POST http://localhost:8877/api/users
 Content-Type: application/json
 
 {
   "user":{
     "username": "jake",
-    "email": "jake22@jake.jake",
+    "email": "new34@jake.jake",
     "password": "jakejake"
+  }
+}
+
+#######
+
+GET http://localhost:8877/api/user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWtlMjlAamFrZS5qYWtlIiwicm9sZXMiOiJST0xFX1VTRVIiLCJpc3MiOiJqdW5ueWxhbmQiLCJpYXQiOjE2ODU1MDYwOTksImV4cCI6MTY4NTU5MjQ5OX0.uiE0eZzFdhzauC5mac8ZPIK4sky3Nij6nVOqZN_i_4w
+
+######
+
+PUT http://localhost:8877/api/user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZXczNEBqYWtlLmpha2UiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlzcyI6Imp1bm55bGFuZCIsImlhdCI6MTY4NTUxNjU1NywiZXhwIjoxNjg1NjAyOTU3fQ.8wY4H7yEbaABwSiQjpbZZ0PAiHgBRcaLufVbxEBeU6E
+
+{
+  "user":{
+    "email": "newDatas10@DataUp",
+    "bio": "I like to skateboard2",
+    "image": "https://i.stack.imgur.com/xHWG8.jpg2"
   }
 }
