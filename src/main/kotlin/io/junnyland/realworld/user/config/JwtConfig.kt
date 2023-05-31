@@ -21,7 +21,7 @@ class JwtConfig {
     fun default() = SecurityInfo(
         "realworlddevelopjunnyland1234",
         "junnyland",
-        60 * 60
+        60 * 60 * 24
     )
 
     data class SecurityInfo(

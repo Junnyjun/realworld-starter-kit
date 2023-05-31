@@ -19,5 +19,5 @@ class JwtPermissionEvaluator : PermissionEvaluator {
         targetId: Serializable,
         targetType: String,
         permission: Any,
-    ) = false
+    ) = authentication.isAuthenticated
 }

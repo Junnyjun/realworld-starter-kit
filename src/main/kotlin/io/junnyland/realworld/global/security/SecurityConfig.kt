@@ -6,7 +6,6 @@ import io.junnyland.realworld.user.action.out.security.TokenValidator
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.DependsOn
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.FORBIDDEN
@@ -27,6 +26,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono.fromRunnable
 import reactor.core.publisher.Mono.just
@@ -58,8 +58,7 @@ class SecurityConfig(
         .httpBasic().disable()
         .authenticationManager(reactiveAuthenticationManager)
         .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
-        .authorizeExchange {
-            it
+        .authorizeExchange { it
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers(
                     HttpMethod.POST,
