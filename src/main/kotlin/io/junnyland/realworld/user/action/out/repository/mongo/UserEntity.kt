@@ -30,6 +30,13 @@ data class UserEntity(
     )
 
     fun updateToken(token: String): UserEntity = this.copy(token = token)
+    fun update(target: User) = this.copy(
+            email =  takeUnless { target.email == "" } ?.let { target.email } ?: this.email,
+            username = takeUnless { target.username == "" } ?.let { target.username } ?: this.username,
+            bio = takeUnless { target.bio == "" } ?.let { target.bio } ?: this.bio,
+            image = takeUnless { target.image == "" } ?.let { target.image } ?: this.image,
+        )
+    fun updatePassword(password: String): UserEntity = this.copy(password = password)
 
     companion object {
         fun byDomain(user: User, encoded: String): UserEntity = UserEntity(

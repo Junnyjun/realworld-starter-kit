@@ -1,6 +1,6 @@
 package io.junnyland.realworld.user.domain
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+
 
 data class User(
     val email: String,
@@ -10,5 +10,6 @@ data class User(
     val bio: String = "",
     val image: String = "",
 ) {
+    val prefixToken get() = token.removePrefix("Bearer ")
 
 }
