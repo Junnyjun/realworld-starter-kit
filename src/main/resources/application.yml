@@ -3,6 +3,7 @@ spring:
     mongodb:
       host: 129.154.196.125
       port: 27017
+      database: live
 
   main:
     web-application-type: reactive
