@@ -16,7 +16,7 @@ interface FindSecurityUser : ReactiveUserDetailsService {
     ): FindSecurityUser {
         override fun findByUsername(username: String) = userRepository.findBy(username)
             .map { it.toSecurity() }
-            .doOnError { throw UsernameNotFoundException("Find User Fail") }
+            .doOnError { error("Find User Fail") }
     }
 }
 private fun User.toSecurity():UserDetails = org.springframework.security.core.userdetails.User(
