@@ -6,4 +6,5 @@ import reactor.core.publisher.Mono
 interface MongoUserRepository:ReactiveMongoRepository<UserEntity, String>{
     fun existsByEmail(email: String): Mono<Boolean>
     fun findByEmail(email: String): Mono<UserEntity>
+    fun findByToken(token: String): Mono<UserEntity>
 }

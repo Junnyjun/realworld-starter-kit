@@ -14,6 +14,7 @@ private fun Boolean.isNotHave() = !this
 interface UserRepository {
     fun save(user: User): Mono<User>
     fun findBy(email: String): Mono<User>
+    fun parseBy(token: String): Mono<User>
     fun renewToken(email: String, token: String): Mono<User>
 
     @Repository
@@ -23,7 +24,14 @@ interface UserRepository {
     ) : UserRepository {
         override fun save(user: User) = repository.existsByEmail(user.email)
             .filter { it.isNotHave() }
-            .flatMap { repository.save(UserEntity.byDomain(user,passwordEncoder.encode(user.password))) }
+            .flatMap {
+                repository.save(
+                    UserEntity.byDomain(
+                        user,
+                        passwordEncoder.encode(user.password)
+                    )
+                )
+            }
             .map { it.toDomain() }
             .doOnError { throw IllegalStateException("Create User Fail!") }
 
@@ -31,6 +39,10 @@ interface UserRepository {
         override fun findBy(email: String) = repository.findByEmail(email)
             .map { it.toDomain() }
             .doOnError { throw UsernameNotFoundException("Find User Fail") }
+
+        override fun parseBy(token: String): Mono<User> = repository.findByToken(token)
+            .map { it.toDomain() }
+            .doOnError { throw UsernameNotFoundException("Bad Token") }
 
         @Transactional
         override fun renewToken(email: String, token: String): Mono<User> =

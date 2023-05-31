@@ -25,6 +25,11 @@ data class SignUpRequest(
     val username: String,
     val password: String
 ) {
+    init {
+        require(email.isNotBlank()) { "email must not be blank" }
+        require(username.isNotBlank()) { "username must not be blank" }
+        require(password.isNotBlank()) { "password must not be blank" }
+    }
     val toUsecase: UserSignUp.SignUpRequest
         get() = UserSignUp.SignUpRequest(
             email = email,
