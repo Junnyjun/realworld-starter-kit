@@ -1,21 +1,21 @@
 package io.junnyland.realworld.user.flow
 
+import ch.qos.logback.classic.PatternLayout.HEADER_PREFIX
 import io.junnyland.realworld.user.action.out.repository.UserRepository
 import io.junnyland.realworld.user.action.out.security.TokenParser
-import io.junnyland.realworld.user.action.out.security.TokenValidator
 import io.junnyland.realworld.user.domain.User
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
-interface FindUser {
+interface UserFind {
     fun byToken(token: String): Mono<User>
 
     @Service
-    class FindUserUsecase(
+    class UserFindUsecase(
         private val userRepository: UserRepository,
         private val tokenParser: TokenParser
-    ) : FindUser {
+    ) : UserFind {
         override fun byToken(token: String) = token
             .removePrefix("Bearer ")
             .let { tokenParser.extract(it) }

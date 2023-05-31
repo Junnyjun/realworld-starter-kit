@@ -1,5 +1,6 @@
 package io.junnyland.realworld.user.action.`in`.http.model
 
+import io.junnyland.realworld.user.domain.User
 import io.junnyland.realworld.user.flow.UserSignIn
 import io.junnyland.realworld.user.flow.UserSignUp
 
@@ -35,5 +36,21 @@ data class SignUpRequest(
             email = email,
             username = username,
             password = password
+        )
+}
+data class UpdateRequest(
+    val email: String?,
+    val username: String?,
+    val password: String?,
+    val image: String?,
+    val bio: String?
+) {
+    fun toDomain(token:String): User= User(
+            email = email ?: "",
+            token = token,
+            username = username ?: "",
+            password = password ?: "",
+            image = image ?: "",
+            bio = bio ?: ""
         )
 }

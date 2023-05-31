@@ -9,10 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
-private typealias UserAndToken = Pair<String, String>
 
-private fun UserAndToken.name() = this.first
-private fun UserAndToken.token() = this.second
 
 interface UserSignIn {
     fun login(request: Mono<SignInRequest>): Mono<User>
@@ -20,7 +17,6 @@ interface UserSignIn {
     @Service
     class UserSignInUsecase(
         private val authenticationManager: ReactiveAuthenticationManager,
-        private val passwordEncoder: PasswordEncoder,
         private val tokenProvider: TokenProvider,
         private val userRepository: UserRepository,
     ) : UserSignIn {
@@ -28,7 +24,7 @@ interface UserSignIn {
             .map { UsernamePasswordAuthenticationToken(it.email, it.password) }
             .flatMap { authenticationManager.authenticate(it) }
             .map { authenticate -> authenticate.name to tokenProvider.generate(authenticate) }
-            .flatMap { userInfo: UserAndToken -> userRepository.renewToken(userInfo.name(), userInfo.token()) }
+            .flatMap { userInfo: UserAndToken -> userRepository.renewToken(userInfo.name, userInfo.token) }
     }
 
     data class SignInRequest(
