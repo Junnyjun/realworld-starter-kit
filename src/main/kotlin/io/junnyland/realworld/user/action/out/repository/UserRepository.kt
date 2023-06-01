@@ -22,6 +22,7 @@ interface UserRepository {
         private val repository: MongoUserRepository,
         private val passwordEncoder: PasswordEncoder,
     ) : UserRepository {
+        @Transactional
         override fun save(user: User) = repository.existsByEmail(user.email)
             .filter { it.isNotHave() }
             .flatMap { repository.save(byDomain(user, passwordEncoder.encode(user.password))) }
@@ -33,6 +34,7 @@ interface UserRepository {
             .map { it.toDomain() }
             .doOnError { error("Find User Fail") }
 
+        @Transactional(readOnly = true)
         override fun parseBy(token: String): Mono<User> = repository.findByToken(token)
             .map { it.toDomain() }
             .doOnError { error("Bad Token") }

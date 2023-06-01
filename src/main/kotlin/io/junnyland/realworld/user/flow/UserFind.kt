@@ -17,7 +17,7 @@ interface UserFind {
         private val tokenParser: TokenParser
     ) : UserFind {
         override fun byToken(token: String) = token
-            .removePrefix("Bearer ")
+            .removePrefix("Token ")
             .let { tokenParser.extract(it) }
             .let { it as UsernamePasswordAuthenticationToken }
             .let { userRepository.findBy(it.name) }

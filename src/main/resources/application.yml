@@ -4,6 +4,9 @@ spring:
       host: 129.154.196.125
       port: 27017
       database: live
+      field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
+      repositories:
+        type: reactive
 
   main:
     web-application-type: reactive

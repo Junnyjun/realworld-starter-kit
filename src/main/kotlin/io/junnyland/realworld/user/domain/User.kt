@@ -10,6 +10,6 @@ data class User(
     val bio: String = "",
     val image: String = "",
 ) {
-    val prefixToken get() = token.removePrefix("Bearer ")
+    val prefixToken get() = token.removePrefix("Token ")
 
 }

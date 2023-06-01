@@ -10,7 +10,7 @@ import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebFilterChain
 import reactor.core.publisher.Mono
 
-private const val HEADER_PREFIX = "Bearer "
+private const val HEADER_PREFIX = "Token "
 
 class JwtTokenAuthenticationFilter(
     private val validator: TokenValidator,
