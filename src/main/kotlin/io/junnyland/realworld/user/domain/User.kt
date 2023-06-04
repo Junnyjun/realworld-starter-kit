@@ -9,7 +9,4 @@ data class User(
     val password: String,
     val bio: String = "",
     val image: String = "",
-) {
-    val prefixToken get() = token.removePrefix("Token ")
-
-}
+)

@@ -1,6 +1,6 @@
 package io.junnyland.realworld.user.flow
 
-import ch.qos.logback.classic.PatternLayout.HEADER_PREFIX
+import io.junnyland.realworld.global.security.tokenPrefix
 import io.junnyland.realworld.user.action.out.repository.UserRepository
 import io.junnyland.realworld.user.action.out.security.TokenParser
 import io.junnyland.realworld.user.domain.User
@@ -17,7 +17,7 @@ interface UserFind {
         private val tokenParser: TokenParser
     ) : UserFind {
         override fun byToken(token: String) = token
-            .removePrefix("Token ")
+            .tokenPrefix()
             .let { tokenParser.extract(it) }
             .let { it as UsernamePasswordAuthenticationToken }
             .let { userRepository.findBy(it.name) }

@@ -10,7 +10,8 @@ import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebFilterChain
 import reactor.core.publisher.Mono
 
-private const val HEADER_PREFIX = "Token "
+const val HEADER_PREFIX = "Token "
+fun String.tokenPrefix(): String = this.removePrefix(HEADER_PREFIX)
 
 class JwtTokenAuthenticationFilter(
     private val validator: TokenValidator,
@@ -28,5 +29,5 @@ class JwtTokenAuthenticationFilter(
     private fun resolveToken(request: ServerHttpRequest): String? =
         request.headers.getFirst(HttpHeaders.AUTHORIZATION)
             ?.takeIf { it.startsWith(HEADER_PREFIX) }
-            ?.substring(7)
+            ?.removePrefix(HEADER_PREFIX)
 }

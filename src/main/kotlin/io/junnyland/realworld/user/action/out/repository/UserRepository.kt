@@ -1,5 +1,6 @@
 package io.junnyland.realworld.user.action.out.repository
 
+import io.junnyland.realworld.profile.flow.FollowProfile
 import io.junnyland.realworld.user.action.out.repository.mongo.MongoUserRepository
 import io.junnyland.realworld.user.action.out.repository.mongo.UserEntity.Companion.byDomain
 import io.junnyland.realworld.user.domain.User
@@ -16,6 +17,9 @@ interface UserRepository {
     fun parseBy(token: String): Mono<User>
     fun renewToken(email: String, token: String): Mono<User>
     fun fetch(email: String, target: User): Mono<User>
+    fun exist(follower: String): Mono<Boolean>
+    fun findIdBy(email: String) : Mono<String>
+    fun findIdByName(target: String): Mono<String>
 
     @Repository
     class UserNosqlRepository(
@@ -52,6 +56,19 @@ interface UserRepository {
             .flatMap { repository.save(it) }
             .map { it.toDomain() }
             .doOnError { error("Update User Fail") }
+
+        @Transactional(readOnly = true)
+        override fun exist(follower: String): Mono<Boolean> = repository.existsByEmail(follower)
+
+        @Transactional(readOnly = true)
+        override fun findIdBy(email: String): Mono<String> = repository.findByEmail(email)
+        .map { it.entityId() }
+        .doOnError { error("Find User Fail") }
+
+        @Transactional(readOnly = true)
+        override fun findIdByName(name: String): Mono<String> =repository.findByUsername(name)
+            .map { it.entityId() }
+            .doOnError { error("Find User Fail") }
     }
 
 }

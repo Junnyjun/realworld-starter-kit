@@ -1,13 +1,28 @@
 package io.junnyland.realworld.profile.action.out.repository
 
+import io.junnyland.realworld.profile.action.out.repository.mongo.MongoProfileRepository
+import io.junnyland.realworld.profile.action.out.repository.mongo.ProfileEntity
+import io.junnyland.realworld.profile.domain.Profile
+import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
+
 interface ProfileRepository {
-    fun isFollow(target: String, follower: String): Boolean
+    fun isFollow(profile: Profile): Mono<Boolean>
+    fun follow(profile: Profile): Mono<ProfileEntity>
 
+    @Repository
+    class ProfileNosqlRepository(
+        private val repository: MongoProfileRepository
+    ) : ProfileRepository {
 
-    class ProfileNosqlRepository: ProfileRepository {
+        override fun isFollow(profile: Profile): Mono<Boolean> =
+            repository.existsByTargetAndFollower(profile.target, profile.user)
 
-        override fun isFollow(target: String, follower: String): Boolean {
-            TODO("Not yet implemented")
-        }
+        override fun follow(profile: Profile) = repository.save(
+            ProfileEntity(
+                target = profile.target,
+                follower = profile.user
+            )
+        )
     }
 }

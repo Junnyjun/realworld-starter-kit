@@ -1,0 +1,3 @@
+POST http://localhost:8877/api/profiles/jake/follow
+Content-Type: application/json
+Authorization: Token eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZXczNEBqYWtlLmpha2UiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlzcyI6Imp1bm55bGFuZCIsImlhdCI6MTY4NTg3Njc1NCwiZXhwIjoxNjg1OTYzMTU0fQ.Df5c7vGMoM2M5w2ewpiEiOej-DaBeHYiw4wFil1KydE
