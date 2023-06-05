@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono
 
 
 
-interface UserSignIn {
+fun interface UserSignIn {
     fun login(request: Mono<SignInRequest>): Mono<User>
 
     @Service

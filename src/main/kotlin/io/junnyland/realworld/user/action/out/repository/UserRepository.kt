@@ -1,6 +1,5 @@
 package io.junnyland.realworld.user.action.out.repository
 
-import io.junnyland.realworld.profile.flow.FollowProfile
 import io.junnyland.realworld.user.action.out.repository.mongo.MongoUserRepository
 import io.junnyland.realworld.user.action.out.repository.mongo.UserEntity.Companion.byDomain
 import io.junnyland.realworld.user.domain.User

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
 
-interface UserSignUp {
+fun interface UserSignUp {
     fun signUp(request: Mono<SignUpRequest>): Mono<User>
 
     @Service

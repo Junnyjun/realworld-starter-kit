@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
-interface UserFind {
+fun interface UserFind {
     fun byToken(token: String): Mono<User>
 
     @Service

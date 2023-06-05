@@ -7,22 +7,22 @@ import io.junnyland.realworld.user.action.out.repository.UserRepository
 import io.junnyland.realworld.user.action.out.security.TokenParser
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
-import reactor.core.publisher.Mono.zip
 
-interface FollowProfile {
-    fun execute(request: Mono<FollowRequest>): Mono<ProfileEntity>
+
+fun interface ProfileUnFollow {
+    fun execute(request: Mono<FollowRequest>): Mono<Void>
 
     @Service
-    class FollowProfileUsecase(
+    class ProfileUnFollowUsecase(
         private val profile: ProfileRepository,
         private val user: UserRepository,
         private val tokenParser: TokenParser
-        ) : FollowProfile {
-        override fun execute(request: Mono<FollowRequest>)= request
-                .doOnNext { user.exist(it.target) }
-                .flatMap{ zip(user.findIdBy(tokenParser.extract(it.token).name), user.findIdByName(it.target)) }
-                .flatMap { profile.follow(Profile(it.t1,it.t2)) }
-        }
+    ) : ProfileUnFollow {
+        override fun execute(request: Mono<FollowRequest>): Mono<Void> = request
+            .doOnNext { user.exist(it.target) }
+            .flatMap{ Mono.zip(user.findIdBy(tokenParser.extract(it.token).name), user.findIdByName(it.target)) }
+            .flatMap { profile.unfollow(Profile(it.t1,it.t2)) }
+    }
 
 
     data class FollowRequest(

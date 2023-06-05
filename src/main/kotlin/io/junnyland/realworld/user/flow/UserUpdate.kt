@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
+fun
 interface UserUpdate {
     fun fetch(target:Mono<User>): Mono<User>
 

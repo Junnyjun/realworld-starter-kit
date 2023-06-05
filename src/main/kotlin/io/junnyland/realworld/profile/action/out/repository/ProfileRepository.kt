@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono
 interface ProfileRepository {
     fun isFollow(profile: Profile): Mono<Boolean>
     fun follow(profile: Profile): Mono<ProfileEntity>
+    fun unfollow(profile: Profile): Mono<Void>
 
     @Repository
     class ProfileNosqlRepository(
@@ -23,6 +24,12 @@ interface ProfileRepository {
                 target = profile.target,
                 follower = profile.user
             )
+        )
+
+        override fun unfollow(profile: Profile): Mono<
+                Void> = repository.deleteAllByTargetAndFollower(
+            profile.target,
+            profile.user
         )
     }
 }

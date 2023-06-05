@@ -1,8 +1,8 @@
 package io.junnyland.realworld.profile.action.`in`.http
 
 import io.junnyland.realworld.global.security.tokenPrefix
-import io.junnyland.realworld.profile.flow.FollowProfile
-import io.junnyland.realworld.profile.flow.FollowProfile.FollowRequest
+import io.junnyland.realworld.profile.flow.ProfileFollow
+import io.junnyland.realworld.profile.flow.ProfileFollow.FollowRequest
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono
 @RestController
 @RequestMapping("/api/profiles")
 class FollowController(
-    private val followProfile: FollowProfile
+    private val profileFollow: ProfileFollow
 
 ) {
 
@@ -21,6 +21,6 @@ class FollowController(
         @PathVariable("username") username: String
     ) = Mono
         .just(FollowRequest(token.tokenPrefix(), username))
-        .let { followProfile.execute(it) }
+        .let { profileFollow.execute(it) }
 }
 

@@ -5,4 +5,5 @@ import reactor.core.publisher.Mono
 
 interface MongoProfileRepository: ReactiveMongoRepository<ProfileEntity, String> {
     fun existsByTargetAndFollower(target: String, follower: String): Mono<Boolean>
+    fun deleteAllByTargetAndFollower(target: String, user: String) : Mono<Void>
 }
