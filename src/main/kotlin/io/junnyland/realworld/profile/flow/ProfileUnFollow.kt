@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono
 
 
 fun interface ProfileUnFollow {
-    fun execute(request: Mono<FollowRequest>): Mono<Void>
+    fun execute(request: Mono<UnFollowRequest>): Mono<Void>
 
     @Service
     class ProfileUnFollowUsecase(
@@ -18,14 +18,14 @@ fun interface ProfileUnFollow {
         private val user: UserRepository,
         private val tokenParser: TokenParser
     ) : ProfileUnFollow {
-        override fun execute(request: Mono<FollowRequest>): Mono<Void> = request
+        override fun execute(request: Mono<UnFollowRequest>): Mono<Void> = request
             .doOnNext { user.exist(it.target) }
             .flatMap{ Mono.zip(user.findIdBy(tokenParser.extract(it.token).name), user.findIdByName(it.target)) }
             .flatMap { profile.unfollow(Profile(it.t1,it.t2)) }
     }
 
 
-    data class FollowRequest(
+    data class UnFollowRequest(
         val token: String,
         val target: String
     )
